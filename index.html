@@ -9,9 +9,9 @@
 <body>
     <div class="container">
         <h1>Welcome to cadXpert.tech</h1>
-        <p>Upload your 3D model file to get a quote for 3D printing.</p>
+        <p>Upload your 3D model file (.igs) to get a quote for 3D printing.</p>
         <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="modelFile" name="modelFile" accept=".stl,.obj,.zip" required>
+            <input type="file" id="modelFile" name="modelFile" accept=".igs" required>
             <button type="submit">Upload</button>
         </form>
         <div id="result"></div>
@@ -33,6 +33,10 @@
                     method: 'POST',
                     body: formData
                 });
+
+                if (!response.ok) {
+                    throw new Error('Failed to upload file');
+                }
 
                 const result = await response.json();
                 document.getElementById('result').innerHTML = `
