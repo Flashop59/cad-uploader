@@ -20,20 +20,30 @@
     <script>
         document.getElementById('uploadForm').onsubmit = async function (event) {
             event.preventDefault();
+            const fileInput = document.getElementById('modelFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file to upload.');
+                return;
+            }
             const formData = new FormData();
-            formData.append('modelFile', document.getElementById('modelFile').files[0]);
+            formData.append('modelFile', fileInput.files[0]);
 
-            const response = await fetch('/upload', {
-                method: 'POST',
-                body: formData
-            });
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
 
-            const result = await response.json();
-            document.getElementById('result').innerHTML = `
-                <h2>Quote</h2>
-                <p>Volume: ${result.volume.toFixed(2)} cm³</p>
-                <p>Price: ₹${result.price.toFixed(2)}</p>
-            `;
+                const result = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h2>Quote</h2>
+                    <p>Volume: ${result.volume.toFixed(2)} cm³</p>
+                    <p>Price: ₹${result.price.toFixed(2)}</p>
+                `;
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                alert('An error occurred while uploading the file. Please try again.');
+            }
         };
     </script>
 </body>
