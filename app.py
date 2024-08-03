@@ -7,6 +7,9 @@ app = Flask(__name__)
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files['modelFile']
+    if not file:
+        return jsonify({'error': 'No file uploaded'}), 400
+    
     file_path = os.path.join('/tmp', file.filename)
     file.save(file_path)
 
